@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0f2a44">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Galley">
+  <title>Galley Scan</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="top">
+    <nav class="modes" role="tablist" aria-label="Mode">
+      <button data-mode="add" role="tab">Add</button>
+      <button data-mode="remove" role="tab">Use</button>
+      <button data-mode="wish" role="tab">Wish</button>
+      <button data-mode="count" role="tab">Count</button>
+    </nav>
+    <button id="settingsBtn" class="icon-btn" aria-label="Settings">⚙︎</button>
+  </header>
+
+  <div class="locker-bar" id="lockerBar">
+    <label for="lockerSelect" id="lockerLabel">Locker</label>
+    <select id="lockerSelect"></select>
+  </div>
+
+  <main>
+    <section class="camera" id="camera">
+      <video id="video" playsinline muted autoplay></video>
+      <div class="frame" aria-hidden="true"></div>
+      <div class="scan-hint" id="scanHint"></div>
+      <button class="start-overlay" id="startBtn">Tap to start scanning</button>
+    </section>
+
+    <div class="actions">
+      <button id="manualBtn" class="secondary">⌨︎ Type a code</button>
+      <span class="queue-badge" id="queueBadge" hidden></span>
+    </div>
+
+    <section class="recent">
+      <h2>Recent</h2>
+      <ul id="recentList"></ul>
+    </section>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <!-- Quantity sheet -->
+  <dialog id="qtySheet" class="sheet">
+    <form method="dialog">
+      <p class="sheet-mode" id="qtyMode"></p>
+      <h3 id="qtyTitle"></h3>
+      <p class="muted" id="qtyCode"></p>
+      <div class="stepper">
+        <button type="button" data-step="-1" aria-label="Less">−</button>
+        <input id="qtyInput" type="number" inputmode="numeric" min="1" value="1">
+        <button type="button" data-step="1" aria-label="More">+</button>
+      </div>
+      <div class="row">
+        <button value="ok" class="primary" id="qtyOk">Save</button>
+        <button value="cancel" class="secondary">Cancel</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Name sheet (unknown barcode) -->
+  <dialog id="nameSheet" class="sheet">
+    <form method="dialog">
+      <h3>New item</h3>
+      <p class="muted" id="nameCode"></p>
+      <input id="nameInput" type="text" placeholder="e.g. Heinz baked beans 415g" autocomplete="off" autocapitalize="sentences">
+      <div class="row">
+        <button value="ok" class="primary">Save</button>
+        <button value="cancel" class="secondary">Skip</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Manual code sheet -->
+  <dialog id="manualSheet" class="sheet">
+    <form method="dialog">
+      <h3>Type a code</h3>
+      <p class="muted">A barcode number, or your own code for items without one (e.g. RICE-BULK).</p>
+      <input id="manualInput" type="text" autocomplete="off" autocapitalize="characters">
+      <div class="row">
+        <button value="ok" class="primary">Next</button>
+        <button value="cancel" class="secondary">Cancel</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Settings -->
+  <dialog id="settingsSheet" class="sheet tall">
+    <form method="dialog" id="settingsForm">
+      <h3>Settings</h3>
+      <button type="button" class="primary wide" id="scanSetupBtn">Scan setup code</button>
+      <p class="muted">In the Sheet: ⚓ Provisioning → Phone setup QR.</p>
+      <label>Web app URL<input id="urlInput" type="url" placeholder="https://script.google.com/macros/s/…/exec" autocomplete="off"></label>
+      <label>API key<input id="keyInput" type="text" autocomplete="off" autocapitalize="none" spellcheck="false"></label>
+      <div class="row">
+        <button type="button" class="secondary" id="testBtn">Test connection</button>
+        <button type="button" class="secondary" id="flushBtn">Send queued</button>
+      </div>
+      <p class="status" id="settingsStatus"></p>
+      <div class="row">
+        <button value="close" class="primary">Done</button>
+        <button type="button" class="secondary" id="clearRecentBtn">Clear recent</button>
+      </div>
+      <p class="muted small" id="versionLine"></p>
+    </form>
+  </dialog>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
